@@ -82,7 +82,12 @@ exports.register = async (req, res, next) => {
 
     // Generate token (logika token bisa juga di-abstraksi ke helper)
     const token = jwt.sign(
-      { id: newUser.id, email: newUser.email, full_name: newUser.full_name },
+      {
+        id: newUser.id,
+        email: newUser.email,
+        full_name: newUser.full_name,
+        role: newUser.role,
+      },
       JWT_SECRET,
       { expiresIn: "24h" }
     );
@@ -144,7 +149,12 @@ exports.login = async (req, res, next) => {
     }
 
     const token = jwt.sign(
-      { id: user.id, email: user.email, full_name: user.full_name },
+      {
+        id: user.id,
+        email: user.email,
+        full_name: user.full_name,
+        role: user.role,
+      },
       JWT_SECRET,
       { expiresIn: "24h" }
     );
@@ -263,6 +273,7 @@ exports.refreshToken = async (req, res, next) => {
         id: req.user.id,
         email: req.user.email,
         full_name: req.user.full_name,
+        role: req.user.role,
       },
       JWT_SECRET,
       { expiresIn: "24h" }
