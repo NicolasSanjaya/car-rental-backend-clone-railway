@@ -154,17 +154,18 @@ exports.login = async (req, res, next) => {
 
     res.cookie("token", token, {
       httpOnly: true, // Cookie tidak bisa diakses oleh JavaScript sisi klien
-      secure: true, // Hanya kirim melalui HTTPS di lingkungan produksi
+      secure: process.env.NODE_ENV === "production" ? true : false, // Hanya kirim melalui HTTPS di lingkungan produksi
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Proteksi dari serangan CSRF
       path: "/",
       maxAge: 60 * 60 * 24 * 1000, // Masa berlaku cookie (1 hari dalam milidetik)
+      // domain: ".vercel.app"
     });
 
     if (user.role === "admin") {
       res.cookie("role", "admin", {
         path: "/",
         httpOnly: true,
-        secure: true,
+        secure: process.env.NODE_ENV === "production" ? true : false,
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
         maxAge: 60 * 60 * 24 * 1000,
       });
