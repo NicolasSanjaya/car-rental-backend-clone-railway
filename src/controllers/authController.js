@@ -156,14 +156,12 @@ exports.login = async (req, res, next) => {
       httpOnly: true, // Cookie tidak bisa diakses oleh JavaScript sisi klien
       secure: process.env.NODE_ENV === "production" ? true : false, // Hanya kirim melalui HTTPS di lingkungan produksi
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Proteksi dari serangan CSRF
-      path: "/",
       maxAge: 60 * 60 * 24 * 1000, // Masa berlaku cookie (1 hari dalam milidetik)
       // domain: ".vercel.app"
     });
 
     if (user.role === "admin") {
       res.cookie("role", "admin", {
-        path: "/",
         httpOnly: true,
         secure: process.env.NODE_ENV === "production" ? true : false,
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
@@ -237,9 +235,19 @@ exports.getProfile = async (req, res, next) => {
 
 exports.logout = async (req, res, next) => {
   try {
-    res.clearCookie("token");
-    res.clearCookie("role"); // Hapus cookie role jika ada
-    res.json({
+    res.clearCookie("token", {
+      sameSite: "none",
+      secure: true,
+      path: "/",
+      httpOnly: true,
+    });
+    res.clearCookie("role", {
+      sameSite: "none",
+      secure: true,
+      path: "/",
+      httpOnly: true,
+    }); // Hapus cookie role jika ada
+    res.status(200).json({
       success: true,
       message: "Logout successful",
     });
