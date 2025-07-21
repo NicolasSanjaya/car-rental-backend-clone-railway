@@ -110,7 +110,7 @@ const BookingModel = {
 
   async deleteBooking(id) {
     const result = await pool.query("DELETE FROM bookings WHERE id = $1", [id]);
-    return result.rows[0];
+    return result.rows;
   },
 
   async saveBookingToDatabase(bookingData) {

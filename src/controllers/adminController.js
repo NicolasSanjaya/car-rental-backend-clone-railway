@@ -7,6 +7,7 @@ const cloudinary = require("cloudinary").v2;
 exports.addCars = async (req, res, next) => {
   try {
     const { brand, model, year, features, price, is_available } = req.body;
+    console.log(req.body);
 
     let imageUrl = null;
 
@@ -282,7 +283,6 @@ exports.updateBookings = async (req, res, next) => {
 exports.deleteBookings = async (req, res, next) => {
   try {
     const { id } = req.params;
-
 
     const result = await BookingModel.deleteBooking(id);
 

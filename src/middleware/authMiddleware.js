@@ -43,7 +43,6 @@ exports.authenticateToken = (req, res, next) => {
 // Middleware untuk cek role admin
 exports.isAdmin = (req, res, next) => {
   // Diasumsikan role ada di payload token, atau query dari DB
-  console.log(req.user);
   if (req.user && req.user.role === "admin") {
     next();
   } else {
