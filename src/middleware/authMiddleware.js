@@ -17,8 +17,8 @@ exports.authenticateToken = (req, res, next) => {
       .json({ success: false, message: "Access token is required" });
   }
 
-  if (token) {
-    jwt.verify(token, JWT_SECRET, (err, user) => {
+  if (headerToken !== "undefined" && headerToken !== undefined) {
+    jwt.verify(headerToken, JWT_SECRET, (err, user) => {
       if (err) {
         return res
           .status(403)
@@ -27,8 +27,8 @@ exports.authenticateToken = (req, res, next) => {
       req.user = user; // Simpan payload token (misal: {id, email}) di req.user
       next();
     });
-  } else if (headerToken) {
-    jwt.verify(headerToken, JWT_SECRET, (err, user) => {
+  } else if (token !== undefined) {
+    jwt.verify(token, JWT_SECRET, (err, user) => {
       if (err) {
         return res
           .status(403)
@@ -43,6 +43,7 @@ exports.authenticateToken = (req, res, next) => {
 // Middleware untuk cek role admin
 exports.isAdmin = (req, res, next) => {
   // Diasumsikan role ada di payload token, atau query dari DB
+  console.log(req.user);
   if (req.user && req.user.role === "admin") {
     next();
   } else {

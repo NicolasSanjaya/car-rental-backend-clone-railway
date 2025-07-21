@@ -204,6 +204,7 @@ exports.getProfile = async (req, res, next) => {
   try {
     // ID pengguna didapat dari token JWT yang sudah diverifikasi oleh middleware
     const user = await UserModel.findUserById(req.user.id);
+
     if (!user) {
       return res
         .status(404)
